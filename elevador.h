@@ -26,4 +26,5 @@ void elevadorParado(); /*Não tem nenhuma chamada pendente, mas continua increme
 void aoEntrar(); /*O que fazer ao entrar (ordenar vetor de prioridades e passageiros)*/
 void trataTempo(); /*Calcula os tempos de viagem e etc para imprimir*/
 void escreveLog();/*Escreve no arquivo texto de saida dos eventos*/
-
+void IniciaElevador(); /*Inicializa o elevador*/
+void leArquivos(); /*Lê os arquivos de ambiente e eventos*/
