@@ -2,7 +2,7 @@ typedef int bool;
 #define true 1
 #define false 0
 
-typedef struct {
+typedef struct Passageiro{
 	int andar_entrada;
 	int andar_destino;
 	int numero; 
@@ -13,7 +13,7 @@ typedef struct {
 	/*Talvez outra booleana para identificar se está subindo ou descendo*/
 }Passageiro;
 
-typedef struct{
+typedef struct Elevador{
 	int andar_atual;
 	int total_andares;
 	int ocupantes;
@@ -39,6 +39,6 @@ void aoEntrar(); /*O que fazer ao entrar (ordenar vetor de prioridades e passage
 void aoSair(); /*Executas certas acoes ao deixar o passageiro no destino*/
 void trataTempo(); /*Calcula os tempos de viagem e etc para imprimir*/
 void escreveLog();/*Escreve no arquivo texto de saida dos eventos*/
-void iniciaElevador(Elevador *elevador,char* argv[]); /*Inicializa o elevador*/
-void leArquivos(); /*Lê os arquivos de ambiente e eventos*/
-void embarcadosVazio(Passageiro *embarcados, char* argv[]); /*Preenche o vetor de embarcados*/
+void iniciaElevador(Elevador *elevador,int capacidade , int andares); /*Inicializa o elevador*/
+void leArquivos(int *capacidade, int *andares); /*Lê os arquivos de ambiente e eventos*/
+void embarcadosVazio(Passageiro embarcados[], int capacidade); /*Preenche o vetor de embarcados*/
