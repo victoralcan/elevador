@@ -3,5 +3,6 @@
 
 int main(int agrc, char *argv[])
 {
+	Elevador elevador;
 	return 0;
 }
