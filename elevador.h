@@ -39,6 +39,6 @@ void aoEntrar(); /*O que fazer ao entrar (ordenar vetor de prioridades e passage
 void aoSair(); /*Executas certas acoes ao deixar o passageiro no destino*/
 void trataTempo(); /*Calcula os tempos de viagem e etc para imprimir*/
 void escreveLog();/*Escreve no arquivo texto de saida dos eventos*/
-void iniciaElevador(); /*Inicializa o elevador*/
+void iniciaElevador(Elevador *elevador,char* argv[]); /*Inicializa o elevador*/
 void leArquivos(); /*Lê os arquivos de ambiente e eventos*/
-void embarcadosVazio(); /*Preenche o vetor de embarcados*/
+void embarcadosVazio(Passageiro *embarcados, char* argv[]); /*Preenche o vetor de embarcados*/
