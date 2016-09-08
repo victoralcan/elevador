@@ -18,7 +18,7 @@ int main()
 			aux = rand();
 			saida = aux % (andares - 1);
 		}
-		printf("%d %d %d\n",entrada,saida,globalTimer);
+		/*printf("%d %d %d\n",entrada,saida,globalTimer);*/
 		fprintf(fp, "%d %d %d\n",entrada,saida,globalTimer);
 		globalTimer += 4;
 	}
