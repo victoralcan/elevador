@@ -15,9 +15,9 @@ typedef struct Passageiro{
 
 typedef struct Elevador{
 	int andar_atual;
-	int total_andares;
 	int ocupantes;
-	int capacidade;
+	int capacidade;/*MUDANÇA DE VARIAVEL AQUI!!!!!!!*/
+	int andares;/*PEDE DESCULPA PRO SENHOR*/
 	bool subindo;
 }Elevador;
 
@@ -39,6 +39,6 @@ void aoEntrar(); /*O que fazer ao entrar (ordenar vetor de prioridades e passage
 void aoSair(); /*Executas certas acoes ao deixar o passageiro no destino*/
 void trataTempo(); /*Calcula os tempos de viagem e etc para imprimir*/
 void escreveLog();/*Escreve no arquivo texto de saida dos eventos*/
-void iniciaElevador(Elevador *elevador,int capacidade , int andares); /*Inicializa o elevador*/
-void leArquivos(int *capacidade, int *andares); /*Lê os arquivos de ambiente e eventos*/
-void embarcadosVazio(Passageiro embarcados[], int capacidade); /*Preenche o vetor de embarcados*/
+void iniciaElevador(Elevador *elevador); /*Inicializa o elevador*/
+void leArquivos(Elevador *elevador); /*Lê os arquivos de ambiente e eventos*/
+void embarcadosVazio(Passageiro embarcados[]); /*Preenche o vetor de embarcados*/
