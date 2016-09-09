@@ -30,10 +30,12 @@ void escreveLog()/*Escreve no arquivo texto de saida dos eventos*/
 {
 
 }
-void leArquivos(int *andares, int *capacidade) /*Lê os arquivos do elevador e eventos*/
+void leArquivos(Elevador *elevador) /*Lê os arquivos do elevador e eventos*/
 {
+  int a,c;
 	FILE *fp;
-	fp = fopen("elevador.txt","r");
+  char arq []= "elevador.txt";
+	fp = fopen(arq,"r+");
 	if(fp == NULL)
 	{
 		printf("Não foi possivel abrir arquivo do elevador\n");
@@ -41,11 +43,14 @@ void leArquivos(int *andares, int *capacidade) /*Lê os arquivos do elevador e e
 	}
 	else
 	{
-	fscanf(fp,"%d %d",andares,capacidade);
+	fscanf(fp,"%d %d",&a,&c);
+  elevador->andares = a;
+  elevador->capacidade = c;
 	fclose(fp);
 	}
 }
-void embarcadosVazio(Passageiro embarcados[], int capacidade)/*Preenche o vetor de embarcados*/
+/*
+void embarcadosVazio(Passageiro embarcados[])
 {
 	Passageiro *vazio;
 	vazio->andar_entrada = -1;
@@ -60,12 +65,10 @@ void embarcadosVazio(Passageiro embarcados[], int capacidade)/*Preenche o vetor 
 		embarcados[a] = *vazio;
 	}
 }
-
-void iniciaElevador(Elevador *elevador, int capacidade, int andares) /*Inicializa o elevador*/
+*/
+void iniciaElevador(Elevador *elevador) /*Inicializa o elevador*/
 {
-	elevador->andar_atual = -1;
-	elevador->ocupantes = 0;
-	elevador->subindo = false;
-	elevador->total_andares = andares;
-	elevador->capacidade = capacidade;
+  elevador->andar_atual = -1;
+  elevador->ocupantes = 0;
+  elevador->subindo = false;
 }
