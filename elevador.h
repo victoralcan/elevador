@@ -41,4 +41,4 @@ void trataTempo(); /*Calcula os tempos de viagem e etc para imprimir*/
 void escreveLog();/*Escreve no arquivo texto de saida dos eventos*/
 void iniciaElevador(Elevador *elevador); /*Inicializa o elevador*/
 void leArquivos(Elevador *elevador); /*Lê os arquivos de ambiente e eventos*/
-void embarcadosVazio(Passageiro embarcados[]); /*Preenche o vetor de embarcados*/
+void embarcadosVazio(Passageiro embarcados[],Elevador *elevador); /*Preenche o vetor de embarcados*/
