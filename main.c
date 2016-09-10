@@ -13,7 +13,7 @@ int main()
 	iniciaElevador(elevador);
 
 	embarcados = (Passageiro*) malloc(sizeof(Passageiro) * elevador->capacidade); 
-	/*embarcadosVazio(embarcados,capacidade); *//*seg*/
+	/*embarcadosVazio(embarcados,elevador);*/
 	printf("andar atual %d\n", elevador->andar_atual);
 	printf("ocupantes %d\n", elevador->ocupantes);
 	printf("subindo? %d\n", elevador->subindo);
