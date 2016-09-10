@@ -49,23 +49,23 @@ void leArquivos(Elevador *elevador) /*Lê os arquivos do elevador e eventos*/
 	fclose(fp);
 	}
 }
-/*
-void embarcadosVazio(Passageiro embarcados[])
+
+void embarcadosVazio(Passageiro embarcados[],Elevador *elevador)
 {
 	Passageiro *vazio;
 	vazio->andar_entrada = -1;
 	vazio->andar_destino = -1;
-	vazio->numero = -1;	
+	vazio->numero = -1;
 	vazio->tempo_entrada = -1;
 	vazio->tempo_saida = -1;
 	vazio->tempo_chamada = -1;
 	vazio->dentro = false;
-	for(int a=0;a<capacidade;a++)
+	for(int a=0;a<elevador->capacidade;a++)
 	{
 		embarcados[a] = *vazio;
 	}
 }
-*/
+
 void iniciaElevador(Elevador *elevador) /*Inicializa o elevador*/
 {
   elevador->andar_atual = -1;
