@@ -2,6 +2,10 @@ typedef int bool;
 #define true 1
 #define false 0
 
+typedef struct{
+	Passageiro passageiro;
+}Item;
+
 typedef struct Passageiro{
 	int andar_entrada;
 	int andar_destino;
@@ -16,15 +20,14 @@ typedef struct Passageiro{
 typedef struct Elevador{
 	int andar_atual;
 	int ocupantes;
-	int capacidade;/*MUDANÇA DE VARIAVEL AQUI!!!!!!!*/
-	int andares;/*PEDE DESCULPA PRO SENHOR*/
+	int capacidade;
+	int andares;
 	bool subindo;
 }Elevador;
 
 typedef struct celula {
-  int item;
-  struct celula *proximo;
-  struct celula *ant;
+  struct Item item;
+  struct Item *proximo;
 } celula;
 
 typedef struct tlista{
@@ -41,4 +44,7 @@ void trataTempo(); /*Calcula os tempos de viagem e etc para imprimir*/
 void escreveLog();/*Escreve no arquivo texto de saida dos eventos*/
 void iniciaElevador(Elevador *elevador); /*Inicializa o elevador*/
 void leArquivos(Elevador *elevador); /*Lê os arquivos de ambiente e eventos*/
-void embarcadosVazio(Passageiro embarcados[],Elevador *elevador); /*Preenche o vetor de embarcados*/
+void embarcadosVazio(Passageiro embarcados[],int capacidade); /*Preenche o vetor de embarcados*/
+tlista* criaLista();/*Cria uma lista*/
+void preencheEventos(tlista *lista_eventos, int num_eventos); /*Lê o arquivo de eventos, preenche vetor, ordena e preenche lista*/
+void compara(); /*Função para o qsort*/
