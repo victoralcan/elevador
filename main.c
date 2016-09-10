@@ -9,26 +9,22 @@ int main()
 {
 	Elevador *elevador;
 	Passageiro *embarcados;
+	tlista *lista_eventos;
+	int num_eventos = 0;
 	leArquivos(elevador);
 	iniciaElevador(elevador);
-
 	embarcados = (Passageiro*) malloc(sizeof(Passageiro) * elevador->capacidade); 
-	/*embarcadosVazio(embarcados,elevador);*/
-	printf("andar atual %d\n", elevador->andar_atual);
-	printf("ocupantes %d\n", elevador->ocupantes);
-	printf("subindo? %d\n", elevador->subindo);
-	printf("andares %d\n", elevador->andares);
-	printf("capacidade %d\n", elevador->capacidade);
-	/*for(int i=0;i<capacidade;i++)
-	{
-		printf("andar entrada pass %d %d\n",i+1, embarcados[i].andar_entrada);
-		printf("andar destino pass %d %d\n",i+1, embarcados[i].andar_destino);
-		printf("numero pass %d %d\n",i+1, embarcados[i].numero);
-		printf("tempo entrada pass %d %d\n",i+1, embarcados[i].tempo_entrada);
-		printf("tempo saida pass %d %d\n",i+1, embarcados[i].tempo_saida);
-		printf("dentro pass %d? %d\n",i+1, embarcados[i].dentro);
-	}
-	*/
+	embarcadosVazio(embarcados,elevador->capacidade); /*RX SENHOR POR FAVOR*/
+	lista_eventos = criaLista();
+	preencheEventos(lista_eventos,&num_eventos);
+
+
+
+
+
+
+
+	
 	free(embarcados);
 	return 0;
 }
