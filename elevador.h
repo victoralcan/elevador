@@ -2,10 +2,6 @@ typedef int bool;
 #define true 1
 #define false 0
 
-typedef struct{
-	Passageiro passageiro;
-}Item;
-
 typedef struct Passageiro{
 	int andar_entrada;
 	int andar_destino;
@@ -14,7 +10,7 @@ typedef struct Passageiro{
 	int tempo_saida;
 	int tempo_chamada;
 	bool dentro;
-	/*Talvez outra booleana para identificar se está subindo ou descendo*/
+	bool subindo;
 }Passageiro;
 
 typedef struct Elevador{
@@ -22,11 +18,12 @@ typedef struct Elevador{
 	int ocupantes;
 	int capacidade;
 	int andares;
+	int tempo;
 	bool subindo;
 }Elevador;
 
 typedef struct celula {
-  struct Item item;
+  struct Item *item;
   struct Item *proximo;
 } celula;
 
@@ -34,6 +31,11 @@ typedef struct tlista{
   struct celula *primeiro;
   struct celula *ultimo;
 }tlista;
+
+typedef struct Item{
+	Passageiro passageiro;
+}Item;
+
 
 void elevadorDescendo(); /*Tratamento do elevador descendo*/
 void elevadorSubindo(); /*Tratamento do elevador subindo*/
@@ -46,5 +48,9 @@ void iniciaElevador(Elevador *elevador); /*Inicializa o elevador*/
 void leArquivos(Elevador *elevador); /*Lê os arquivos de ambiente e eventos*/
 void embarcadosVazio(Passageiro embarcados[],int capacidade); /*Preenche o vetor de embarcados*/
 tlista* criaLista();/*Cria uma lista*/
-void preencheEventos(tlista *lista_eventos, int num_eventos); /*Lê o arquivo de eventos, preenche vetor, ordena e preenche lista*/
-void compara(); /*Função para o qsort*/
+void preencheEventos(tlista *lista_eventos, int* num_eventos); /*Lê o arquivo de eventos, preenche vetor, ordena e preenche lista*/
+int compara(const void* x,const void* y); /*Função para o qsort*/
+void insereCompara(Item item,int p,tlista *lista); /*Compara para saber onde inserir o item na lista (inicio, meio ou fim)*/
+void inserePrimeiro(Item item,tlista *lista); /*Insere no inicio da lista*/
+void insereMeio(Item item,int p,tlista *lista); /*Insere no meio da lista*/
+void insereFim(Item item,int p,tlista *lista); /*Insere no final da lista*/
