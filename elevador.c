@@ -3,34 +3,45 @@
 #include "elevador.h"
 
 
-void elevadorDescendo()/*Tratamento do elevador descendo*/
+void elevadorDescendo(Elevador *elevador,tlista *lista_eventos,Passageiro embarcados[],int* num_eventos)/*Tratamento do elevador descendo*/
 {
 
 } 
-void elevadorSubindo() /*Tratamento do elevador subindo*/
-{
-	
-}
-void elevadorParado() /*Não tem nenhuma chamada pendente, mas continua incrementando o tempo*/
+
+void elevadorSubindo(Elevador *elevador,tlista *lista_eventos,Passageiro embarcados[],int* num_eventos) /*Tratamento do elevador subindo*/
 {
 
 }
-void aoEntrar()/*O que fazer ao entrar (ordenar vetor de prioridades e passageiros)*/
+
+void elevadorParado(Elevador *elevador,tlista *lista_eventos,Passageiro embarcados[]) /*Não tem nenhuma chamada pendente, mas continua incrementando o tempo*/
 {
 
 }
-void aoSair() /*Executas certas acoes ao deixar o passageiro no destino*/
-{
 
-}
-void trataTempo() /*Calcula os tempos de viagem e etc para imprimir*/
+void aoEntrar(Passageiro passageiro)/*O que fazer ao entrar (ordenar vetor de prioridades e passageiros)*/
 {
-
+	FILE *fp;
+	fp = fopen("log.txt","a");
+	fprintf(fp, "Passageiro %d entra %d Zepslons após a chamada\n", passageiro.numero, (passageiro.tempo_entrada - passageiro.tempo_chamada));
+	fclose(fp);
 }
-void escreveLog()/*Escreve no arquivo texto de saida dos eventos*/
+
+void aoSair(Passageiro passageiro) /*Executas certas acoes ao deixar o passageiro no destino*/
 {
-
+	FILE *fp;
+	fp = fopen("log.txt","a");
+	fprintf(fp, "Passageiro %d sai %d Zepslons após ter entrado\n", passageiro.numero, (passageiro.tempo_saida - passageiro.tempo_entrada));
+	fclose(fp);
 }
+
+void trataTempo(Elevador *elevador) /*Imprime informações do elevador no arquivo log*/
+{
+	FILE *fp;
+	fp = fopen("log.txt","a");
+	fprintf(fp, "Zepslon: %d     Andar atual: %d    Passageiros embarcados: %d\n", elevador->tempo, elevador->andar_atual,elevador->ocupantes);
+	fclose(fp);
+}
+
 void leArquivos(Elevador *elevador) /*Lê os arquivos do elevador e eventos*/
 {
   	int a,c;
@@ -72,6 +83,7 @@ void iniciaElevador(Elevador *elevador) /*Inicializa o elevador*/
   elevador->ocupantes = 0;
   elevador->subindo = false;
 }
+
 tlista* criaLista()
 {
 	tlista *nova = (tlista*) malloc(sizeof(tlista));
@@ -79,6 +91,7 @@ tlista* criaLista()
 	nova->primeiro = NULL;
 	return nova;
 }
+
 void preencheEventos(tlista *lista_eventos, int *num_eventos) /*Lê o arquivo de eventos, preenche vetor, ordena e preenche lista*/
 {
 	FILE *fp;
@@ -131,6 +144,7 @@ void preencheEventos(tlista *lista_eventos, int *num_eventos) /*Lê o arquivo de
 		free(eventos);	
 	}
 }
+
 int compara(const void* x,const void* y) /*Funcao parametro para a qsort*/
 {
 	const Passageiro *x1 = (const Passageiro*) x;
