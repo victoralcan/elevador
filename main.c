@@ -18,10 +18,10 @@ int main()
 
 	while(num_eventos > 0)
 	{
-		elevadorSubindo();         /*Primeiro subindo porque ele começa no andar 0*/
-		elevadorDescendo();
+		elevadorSubindo(&elevador,lista_eventos,embarcados,&num_eventos);         /*Primeiro subindo porque ele começa no andar 0*/
+		elevadorDescendo(&elevador,lista_eventos,embarcados,&num_eventos);
 	}
-
+	
 
 
 
