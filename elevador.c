@@ -15,7 +15,9 @@ void elevadorSubindo(Elevador *elevador,tlista *lista_eventos,Passageiro embarca
 
 void elevadorParado(Elevador *elevador,tlista *lista_eventos,Passageiro embarcados[]) /*Não tem nenhuma chamada pendente, mas continua incrementando o tempo*/
 {
-
+	/*while(elevador->ocupantes == 0 && elevador->tempo < passageiro.) {
+		elevador->tempo++;
+	}*/
 }
 
 void leArquivos(Elevador *elevador) /*Lê os arquivos do elevador e eventos*/
@@ -114,7 +116,14 @@ void preencheEventos(tlista *lista_eventos, int *num_eventos) /*Lê o arquivo de
 				item.passageiro.subindo=false;
 			}
 			num++;
-			inserePrimeiro(item,lista_eventos);
+			if(aux == 0)
+			{
+				inserePrimeiro(item,lista_eventos);
+			}
+			else
+			{
+				insereInicio(item, lista_eventos);
+			}
 
 		}
 		free(eventos);	
@@ -146,4 +155,14 @@ void inserePrimeiro(Item item,tlista *lista)
 
   lista->primeiro = nova; 
   lista->ultimo = nova;
+}
+
+void insereInicio(Item item,tlista *lista)
+{
+  celula *nova = (celula*) malloc(sizeof(celula)); /*(celula*) usado para acessar mem alocada*/
+  nova->item = &item;   /*item da nova struct recebe valor dado*/
+
+  nova->proximo = lista->primeiro; /*passa o pont primeiro para o pont proximo*/
+
+  lista->primeiro = nova; /*passa o pont nova para o pont proximo*/
 }
