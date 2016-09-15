@@ -40,8 +40,8 @@ typedef struct Item{
 void elevadorDescendo(Elevador *elevador,tlista *lista_eventos,Passageiro embarcados[],int* num_eventos); /*Tratamento do elevador descendo*/
 void elevadorSubindo(Elevador *elevador,tlista *lista_eventos,Passageiro embarcados[],int* num_eventos); /*Tratamento do elevador subindo*/
 void elevadorParado(Elevador *elevador,tlista *lista_eventos,Passageiro embarcados[]); /*Não tem nenhuma chamada pendente, mas continua incrementando o tempo*/
-void aoEntrar(Passageiro passageiro); /*O que fazer ao entrar (ordenar vetor de prioridades e passageiros), imprimir informações, etc*/
-void aoSair(Passageiro passageiro); /*Executas certas acoes ao deixar o passageiro no destino (imprimir informacoes de tempo na saida)*/
+void aoEntrar(Passageiro passageiro); /*Imprimir no arquivo log informações de entrada*/
+void aoSair(Passageiro passageiro); /*Imprimir no arquivo log informações de saida*/
 void trataTempo(Elevador *elevador); /*Imprime informações do elevador no arquivo log*/
 void iniciaElevador(Elevador *elevador); /*Inicializa o elevador*/
 void leArquivos(Elevador *elevador); /*Lê os arquivos de ambiente e eventos*/
