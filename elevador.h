@@ -22,8 +22,12 @@ typedef struct Elevador{
 	bool subindo;
 }Elevador;
 
+typedef struct Item{
+	Passageiro passageiro;
+}Item;
+
 typedef struct celula {
-  struct Item *item;
+  struct Item item;
   struct celula *proximo;
 } celula;
 
@@ -32,9 +36,7 @@ typedef struct tlista{
   struct celula *ultimo;
 }tlista;
 
-typedef struct Item{
-	Passageiro passageiro;
-}Item;
+
 
 
 void elevadorDescendo(Elevador *elevador,tlista *lista_eventos,Passageiro embarcados[],int* num_eventos); /*Tratamento do elevador descendo*/
