@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "elevador.h"
 
 
@@ -8,7 +9,7 @@ void elevadorDescendo()/*Tratamento do elevador descendo*/
 } 
 void elevadorSubindo() /*Tratamento do elevador subindo*/
 {
-
+	
 }
 void elevadorParado() /*Não tem nenhuma chamada pendente, mas continua incrementando o tempo*/
 {
@@ -32,10 +33,9 @@ void escreveLog()/*Escreve no arquivo texto de saida dos eventos*/
 }
 void leArquivos(Elevador *elevador) /*Lê os arquivos do elevador e eventos*/
 {
-  int a,c;
+  	int a,c;
 	FILE *fp;
-  char arq []= "elevador.txt";
-	fp = fopen(arq,"r+");
+	fp = fopen("elevador.txt","r");
 	if(fp == NULL)
 	{
 		printf("Não foi possivel abrir arquivo do elevador\n");
@@ -43,10 +43,10 @@ void leArquivos(Elevador *elevador) /*Lê os arquivos do elevador e eventos*/
 	}
 	else
 	{
-	fscanf(fp,"%d %d",&a,&c);
-  elevador->andares = a;
-  elevador->capacidade = c;
-	fclose(fp);
+		fscanf(fp,"%d %d",&a,&c);
+		fclose(fp);
+		elevador->andares = a;
+	    elevador->capacidade = c;
 	}
 }
 
@@ -82,7 +82,7 @@ tlista* criaLista()
 void preencheEventos(tlista *lista_eventos, int *num_eventos) /*Lê o arquivo de eventos, preenche vetor, ordena e preenche lista*/
 {
 	FILE *fp;
-	Passageiro eventos;
+	Passageiro *eventos;
 	Item item;
 	int aux,a1,a2,a3,num=1;;
 	fp = fopen("eventos.txt","r");
@@ -95,21 +95,24 @@ void preencheEventos(tlista *lista_eventos, int *num_eventos) /*Lê o arquivo de
 		while(!feof(fp)) /*Enquanto nao chegar no fim do arquivo*/
 		{
 			fscanf(fp,"%d %d %d\n",&aux,&a1,&a2);
-			*num_eventos++;
+			*num_eventos=*num_eventos+1;
 		}
-
-		eventos = (Passageiro*)malloc(sizeof(Passageiro) * (*num_eventos));
+		
+		a1 =  (*num_eventos);
+		eventos = (Passageiro*)malloc(sizeof(Passageiro) * a1);
+	
 		rewind(fp);
 
-		for(aux = 0;aux < *num_eventos;aux++)   /*Preencher o vetor com os dados do arquivo*/
+		for(aux = 0;aux < a1;aux++)   /*Preencher o vetor com os dados do arquivo*/
 		{
 			fscanf(fp,"%d %d %d\n",&eventos[aux].andar_entrada,&eventos[aux].andar_destino,&eventos[aux].tempo_chamada);
 		}
 
 		fclose(fp);
-		qsort();/*Ordenar o vetor de acordo com o tempo*/
+		
+		qsort(eventos,a1,sizeof(Passageiro),compara);/*Ordenar o vetor de acordo com o tempo*/
 
-		for(aux=0;aux<*num_eventos;aux++) /*Preencher a lista*/
+		for(aux=0;aux < *num_eventos;aux++) /*Preencher a lista*/
 		{
 			item.passageiro = eventos[aux];
 			item.passageiro.numero = num;
@@ -122,7 +125,7 @@ void preencheEventos(tlista *lista_eventos, int *num_eventos) /*Lê o arquivo de
 				item.passageiro.subindo=false;
 			}
 			num++;
-			/*Função de inserir o item na lista*/
+			inserePrimeiro(item,lista_eventos);
 
 		}
 		free(eventos);	
@@ -143,4 +146,14 @@ int compara(const void* x,const void* y) /*Funcao parametro para a qsort*/
 	}
 	
 	return 0;
+}
+
+void inserePrimeiro(Item item,tlista *lista)
+{
+  celula *nova = (celula*) malloc(sizeof(celula));
+  nova->item = &item;
+  nova->proximo = NULL; /*não existe proximo pois o elemento é o primeiro*/
+
+  lista->primeiro = nova; 
+  lista->ultimo = nova;
 }
