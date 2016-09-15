@@ -2,23 +2,25 @@
 #include <stdlib.h>
 #include "elevador.h"
 
-/*Argv[1] é elevador*/
-/*Argv[2] é eventos*/
 
 int main()
 {
-	Elevador *elevador;
+	Elevador elevador;
 	Passageiro *embarcados;
 	tlista *lista_eventos;
 	int num_eventos = 0;
-	leArquivos(elevador);
-	iniciaElevador(elevador);
-	embarcados = (Passageiro*) malloc(sizeof(Passageiro) * elevador->capacidade); 
-	embarcadosVazio(embarcados,elevador->capacidade); /*RX SENHOR POR FAVOR*/
+	leArquivos(&elevador);
+	iniciaElevador(&elevador);
+	embarcados = (Passageiro*) malloc(sizeof(Passageiro) * elevador.capacidade); 
+	embarcadosVazio(embarcados,elevador.capacidade); /*RX SENHOR POR FAVOR*/
 	lista_eventos = criaLista();
 	preencheEventos(lista_eventos,&num_eventos);
 
-
+	while(num_eventos > 0)
+	{
+		elevadorSubindo();         /*Primeiro subindo porque ele começa no andar 0*/
+		elevadorDescendo();
+	}
 
 
 
