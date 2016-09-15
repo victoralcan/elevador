@@ -137,11 +137,11 @@ int compara(const void* x,const void* y) /*Funcao parametro para a qsort*/
 
 	if (x1->tempo_chamada < y1->tempo_chamada)
 	{ 
-		return -1;
+		return 1;
 	}
 	if (x1->tempo_chamada > y1->tempo_chamada)
 	{
-	 	return  1;
+	 	return  -1;
 	}
 	
 	return 0;
@@ -150,7 +150,7 @@ int compara(const void* x,const void* y) /*Funcao parametro para a qsort*/
 void inserePrimeiro(Item item,tlista *lista)
 {
   celula *nova = (celula*) malloc(sizeof(celula));
-  nova->item = &item;
+  nova->item = item;
   nova->proximo = NULL; /*não existe proximo pois o elemento é o primeiro*/
 
   lista->primeiro = nova; 
@@ -160,7 +160,7 @@ void inserePrimeiro(Item item,tlista *lista)
 void insereInicio(Item item,tlista *lista)
 {
   celula *nova = (celula*) malloc(sizeof(celula)); /*(celula*) usado para acessar mem alocada*/
-  nova->item = &item;   /*item da nova struct recebe valor dado*/
+  nova->item = item;   /*item da nova struct recebe valor dado*/
 
   nova->proximo = lista->primeiro; /*passa o pont primeiro para o pont proximo*/
 
