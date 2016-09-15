@@ -24,7 +24,7 @@ typedef struct Elevador{
 
 typedef struct celula {
   struct Item *item;
-  struct Item *proximo;
+  struct celula *proximo;
 } celula;
 
 typedef struct tlista{
@@ -50,3 +50,4 @@ tlista* criaLista();/*Cria uma lista*/
 void preencheEventos(tlista *lista_eventos, int* num_eventos); /*Lê o arquivo de eventos, preenche vetor, ordena e preenche lista*/
 int compara(const void* x,const void* y); /*Função para o qsort*/
 void inserePrimeiro(Item item,tlista *lista); /*Insere no inicio da lista*/
+void insereInicio(Item item,tlista *lista); 
