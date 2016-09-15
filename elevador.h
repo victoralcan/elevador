@@ -37,20 +37,16 @@ typedef struct Item{
 }Item;
 
 
-void elevadorDescendo(); /*Tratamento do elevador descendo*/
-void elevadorSubindo(); /*Tratamento do elevador subindo*/
-void elevadorParado(); /*Não tem nenhuma chamada pendente, mas continua incrementando o tempo*/
-void aoEntrar(); /*O que fazer ao entrar (ordenar vetor de prioridades e passageiros)*/
-void aoSair(); /*Executas certas acoes ao deixar o passageiro no destino*/
-void trataTempo(); /*Calcula os tempos de viagem e etc para imprimir*/
-void escreveLog();/*Escreve no arquivo texto de saida dos eventos*/
+void elevadorDescendo(Elevador *elevador,tlista *lista_eventos,Passageiro embarcados[],int* num_eventos); /*Tratamento do elevador descendo*/
+void elevadorSubindo(Elevador *elevador,tlista *lista_eventos,Passageiro embarcados[],int* num_eventos); /*Tratamento do elevador subindo*/
+void elevadorParado(Elevador *elevador,tlista *lista_eventos,Passageiro embarcados[]); /*Não tem nenhuma chamada pendente, mas continua incrementando o tempo*/
+void aoEntrar(Passageiro passageiro); /*O que fazer ao entrar (ordenar vetor de prioridades e passageiros), imprimir informações, etc*/
+void aoSair(Passageiro passageiro); /*Executas certas acoes ao deixar o passageiro no destino (imprimir informacoes de tempo na saida)*/
+void trataTempo(Elevador *elevador); /*Imprime informações do elevador no arquivo log*/
 void iniciaElevador(Elevador *elevador); /*Inicializa o elevador*/
 void leArquivos(Elevador *elevador); /*Lê os arquivos de ambiente e eventos*/
 void embarcadosVazio(Passageiro embarcados[],int capacidade); /*Preenche o vetor de embarcados*/
 tlista* criaLista();/*Cria uma lista*/
 void preencheEventos(tlista *lista_eventos, int* num_eventos); /*Lê o arquivo de eventos, preenche vetor, ordena e preenche lista*/
 int compara(const void* x,const void* y); /*Função para o qsort*/
-void insereCompara(Item item,int p,tlista *lista); /*Compara para saber onde inserir o item na lista (inicio, meio ou fim)*/
 void inserePrimeiro(Item item,tlista *lista); /*Insere no inicio da lista*/
-void insereMeio(Item item,int p,tlista *lista); /*Insere no meio da lista*/
-void insereFim(Item item,int p,tlista *lista); /*Insere no final da lista*/
