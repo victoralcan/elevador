@@ -18,15 +18,14 @@ void elevadorParado(Elevador *elevador,tlista *lista_eventos,Passageiro embarcad
 
 }
 
-void aoEntrar(Passageiro passageiro)/*O que fazer ao entrar (ordenar vetor de prioridades e passageiros)*/
-{
+void aoEntrar(Passageiro passageiro)/*Imprimir no arquivo log informações de entrada*/
 	FILE *fp;
 	fp = fopen("log.txt","a");
 	fprintf(fp, "Passageiro %d entra %d Zepslons após a chamada\n", passageiro.numero, (passageiro.tempo_entrada - passageiro.tempo_chamada));
 	fclose(fp);
 }
 
-void aoSair(Passageiro passageiro) /*Executas certas acoes ao deixar o passageiro no destino*/
+void aoSair(Passageiro passageiro) /*Imprimir no arquivo log informações de saida*/
 {
 	FILE *fp;
 	fp = fopen("log.txt","a");
