@@ -70,12 +70,12 @@ tlista* criaLista()
 	return nova;
 }
 
-void preencheEventos(tlista *lista_eventos, int *num_eventos) /*Lê o arquivo de eventos, preenche vetor, ordena e preenche lista*/
+void preencheEventos(tlista *lista_eventos, tlista *subindo, tlista *descendo, int *num_eventos) /*Lê o arquivo de eventos, preenche vetor, ordena e preenche lista*/
 {
 	FILE *fp;
 	Passageiro *eventos;
 	Item item;
-	int aux,a1,a2,a3,num=1;;
+	int aux,a1,a2,a3,num = 1;
 	fp = fopen("eventos.txt","r");
 	if(fp == NULL)/*COLOQUEI OS DOIS IGUAIS CERTOS AGR SEU FDP*/
 	{
@@ -103,6 +103,9 @@ void preencheEventos(tlista *lista_eventos, int *num_eventos) /*Lê o arquivo de
 		
 		qsort(eventos,a1,sizeof(Passageiro),compara);/*Ordenar o vetor de acordo com o tempo*/
 
+		a1 = 0;
+		a2 = 0;
+
 		for(aux=0;aux < *num_eventos;aux++) /*Preencher a lista*/
 		{
 			item.passageiro = eventos[aux];
@@ -110,10 +113,28 @@ void preencheEventos(tlista *lista_eventos, int *num_eventos) /*Lê o arquivo de
 			if(item.passageiro.andar_entrada<item.passageiro.andar_destino)
 			{
 				item.passageiro.subindo = true;
+				if(a1==0)
+				{
+					inserePrimeiro(item,subindo);
+					a1++;
+				}
+				else
+				{
+					insereInicio(item,subindo);
+				}
 			}
 			else
 			{
-				item.passageiro.subindo=false;
+				item.passageiro.subindo = false;
+				if(a2==0)
+				{
+					inserePrimeiro(item,descendo);
+					a2++;
+				}
+				else
+				{
+					insereInicio(item,descendo);
+				}
 			}
 			num++;
 			if(aux == 0)
