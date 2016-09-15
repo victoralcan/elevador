@@ -49,7 +49,7 @@ void iniciaElevador(Elevador *elevador); /*Inicializa o elevador*/
 void leArquivos(Elevador *elevador); /*Lê os arquivos de ambiente e eventos*/
 void embarcadosVazio(Passageiro embarcados[],int capacidade); /*Preenche o vetor de embarcados*/
 tlista* criaLista();/*Cria uma lista*/
-void preencheEventos(tlista *lista_eventos, int* num_eventos); /*Lê o arquivo de eventos, preenche vetor, ordena e preenche lista*/
+void preencheEventos(tlista *lista_eventos, tlista *subindo, tlista *descendo, int* num_eventos); /*Lê o arquivo de eventos, preenche vetor, ordena e preenche lista*/
 int compara(const void* x,const void* y); /*Função para o qsort*/
 void inserePrimeiro(Item item,tlista *lista); /*Insere no inicio da lista*/
 void insereInicio(Item item,tlista *lista); 
