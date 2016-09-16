@@ -203,28 +203,11 @@ void preencheEventos(tlista *lista_eventos, tlista *entrada, tlista *destino, in
 			if(item.passageiro.andar_entrada<item.passageiro.andar_destino)
 			{
 				item.passageiro.subindo = true;
-				/*if(a1==0)
-				{
-					inserePrimeiro(item,entrada);
-					a1++;
-				}
-				else
-				{
-					insereInicio(item,entrada);
-				}*/
 			}
 			else
 			{
 				item.passageiro.subindo = false;
-				/*if(a2==0)
-				{
-					inserePrimeiro(item,destino);
-					a2++;
-				}
-				else
-				{
-					insereInicio(item,destino);
-				}*/
+			
 			}
 			if(aux == 0)
 			{
@@ -234,8 +217,14 @@ void preencheEventos(tlista *lista_eventos, tlista *entrada, tlista *destino, in
 			{
 				insereInicio(item, lista_eventos);
 			}
-
 		}
+		/*AGORA VOCE VAI ORDENAR DE ACORDO COM AS ENTRADAS*/
+		/*DA O QSORT NO VETOR COM A COMPARAENTRADA(EU NAO FIZ, FAÇA)*/
+		/*LOOP QUE PREENCHE A LISTA "entradas" COM OS ELEMENTOS DO VETOR (SO VER O JEITO Q EU FIZ, É A MESMA COISA*/
+		/*AGORA VOCE VAI ORDENAR DE ACORDO COM OS DESTINOS*/
+		/*DA O QSORT NO VETOR COM A COMPARADESTINO(JA FIZ RX)*/
+		/*LOOP QUE PREENCHE A LISTA "destino" COM O VETOR*/
+		
 		free(eventos);	
 	}
 }
@@ -292,34 +281,6 @@ void insereInicio(Item item,tlista *lista)
   nova->proximo = lista->primeiro; /*passa o pont primeiro para o pont proximo*/
 
   lista->primeiro = nova; /*passa o pont nova para o pont proximo*/
-}
-
-void removeItem(int p, tlista *lista)
-{
-
-  celula *anterior = lista->primeiro;
-  celula *atual = lista->primeiro;
-
-  int indice;
-
-  indice=1;
-
-  while(indice < p-1){
-    anterior = anterior->proximo;
-    indice++;
-  }
-  indice=1;
-  atual = anterior->proximo;
-
-  if(p == 1 || p == 0){
-    lista->primeiro = atual;
-    free(anterior);
-  }
-
-  else{
-    anterior->proximo = atual->proximo;
-    free(atual);
-  }
 }
 
 void remover(int pos, tlista *l)
