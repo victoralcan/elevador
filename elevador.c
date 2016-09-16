@@ -2,15 +2,104 @@
 #include <stdlib.h>
 #include "elevador.h"
 
+void buscano()
+{
 
-void elevadorDescendo(Elevador *elevador,tlista *lista_eventos,Passageiro embarcados[],int* num_eventos)/*Tratamento do elevador descendo*/
+}
+
+void deixano()
+{
+
+}
+
+void deixandoFcfs(Elevador *elevador,Passageiro embarcados[])
+{
+	if(embarcados[0].subindo == true)
+	{
+		while(elevador->andar_atual < embarcados[0].andar_destino)
+		{
+			elevador->andar_atual = elevador->andar_atual + 1;
+			elevador->tempo = elevador->tempo + 1;
+			trataTempo(elevador);
+		}
+	}
+	else
+	{
+		while(elevador->andar_atual > embarcados[0].andar_destino)
+		{
+			elevador->andar_atual = elevador->andar_atual - 1;
+			elevador->tempo = elevador->tempo + 1;
+			trataTempo(elevador);
+		}
+
+	}
+	elevador->tempo = elevador->tempo + 1;
+	embarcados[0].tempo_saida = elevador->tempo;
+	aoSair(embarcados[0]);
+	embarcados[0] = embarcados[1];
+	elevador->ocupantes = 0;
+}
+
+void elevadorDescendoFcfs(Elevador *elevador, tlista *lista_eventos, Passageiro embarcados[], Passageiro *aux)
+{
+	while(elevador->andar_atual > aux->andar_entrada)
+	{
+		elevador->andar_atual = elevador->andar_atual - 1;
+		elevador->tempo = elevador->tempo + 1;
+		trataTempo(elevador);
+	}
+	aux->tempo_entrada = elevador->tempo;
+	aux->dentro = true;
+	if(aux->andar_entrada > aux->andar_destino)
+	{
+		aux->subindo =  false;
+	}
+	else
+	{
+		aux->subindo = true;
+	}
+	aoEntrar(*aux);
+	embarcados[0] = (*aux);
+	elevador->ocupantes = 1;
+	deixandoFcfs(elevador,embarcados);
+}
+
+void elevadorSubindoFcfs(Elevador *elevador, tlista *lista_eventos, Passageiro embarcados[], Passageiro *aux)
+{
+	while(elevador->andar_atual < aux->andar_entrada)
+	{
+		elevador->andar_atual = elevador->andar_atual + 1;
+		elevador->tempo = elevador->tempo + 1;
+		trataTempo(elevador);
+	}
+	aux->tempo_entrada = elevador->tempo;
+	aux->dentro = true;
+	if(aux->andar_entrada > aux->andar_destino)
+	{
+		aux->subindo =  false;
+	}
+	else
+	{
+		aux->subindo = true;
+	}
+	aoEntrar(*aux);
+	embarcados[0] = (*aux);
+	elevador->ocupantes = 1;
+	deixandoFcfs(elevador,embarcados);
+}
+
+void elevadorDescendo(Elevador *elevador,tlista *lista_eventos,tlista *descendo,Passageiro embarcados[],int* num_eventos)/*Tratamento do elevador descendo*/
 {
 
 } 
 
-void elevadorSubindo(Elevador *elevador,tlista *lista_eventos,Passageiro embarcados[],int* num_eventos) /*Tratamento do elevador subindo*/
+void elevadorSubindo(Elevador *elevador,tlista *lista_eventos,tlista *subindo,tlista *prox_subindo,Passageiro embarcados[],int* num_eventos) /*Tratamento do elevador subindo*/
 {
+	/*while(elevador->andar_atual != prox_subindo->ultimo->item.passageiro.andar_destino)
+	{
+		elevadorParado();
 
+	}*/
 }
 
 void elevadorParado(Elevador *elevador,tlista *lista_eventos,Passageiro embarcados[]) /*Não tem nenhuma chamada pendente, mas continua incrementando o tempo*/
@@ -57,9 +146,10 @@ void embarcadosVazio(Passageiro embarcados[], int capacidade)
 
 void iniciaElevador(Elevador *elevador) /*Inicializa o elevador*/
 {
-  elevador->andar_atual = -1;
-  elevador->ocupantes = 0;
-  elevador->subindo = false;
+	 elevador->tempo = 0;
+	 elevador->andar_atual = 0;
+	 elevador->ocupantes = 0;
+	 elevador->subindo = false;
 }
 
 tlista* criaLista()
@@ -70,7 +160,7 @@ tlista* criaLista()
 	return nova;
 }
 
-void preencheEventos(tlista *lista_eventos, tlista *subindo, tlista *descendo, int *num_eventos) /*Lê o arquivo de eventos, preenche vetor, ordena e preenche lista*/
+void preencheEventos(tlista *lista_eventos, tlista *entrada, tlista *destino, int *num_eventos) /*Lê o arquivo de eventos, preenche vetor, ordena e preenche lista*/
 {
 	FILE *fp;
 	Passageiro *eventos;
@@ -91,52 +181,51 @@ void preencheEventos(tlista *lista_eventos, tlista *subindo, tlista *descendo, i
 		
 		a1 =  (*num_eventos);
 		eventos = (Passageiro*)malloc(sizeof(Passageiro) * a1);
-	
 		rewind(fp);
 
-		for(aux = 0;aux < a1;aux++)   /*Preencher o vetor com os dados do arquivo*/
+		for(aux = a1-1;aux >= 0;aux--)   /*Preencher o vetor com os dados do arquivo*/
 		{
 			fscanf(fp,"%d %d %d\n",&eventos[aux].andar_entrada,&eventos[aux].andar_destino,&eventos[aux].tempo_chamada);
+			eventos[aux].numero = num;
+			num++;
 		}
 
 		fclose(fp);
 		
-		qsort(eventos,a1,sizeof(Passageiro),compara);/*Ordenar o vetor de acordo com o tempo*/
+		qsort(eventos,a1,sizeof(Passageiro),&compara);/*Ordenar o vetor de acordo com o tempo*/
 
-		a1 = 0;
-		a2 = 0;
+		/*a1 = 0;
+		a2 = 0;*/
 
-		for(aux=0;aux < *num_eventos;aux++) /*Preencher a lista*/
+		for(aux=0;aux < *num_eventos;aux++) /*Preencher a lista (O COMPARA TA ORDENANDO TUDO PELO TEMPO. PARA PREENCHER DE OUTRO JEITO, FAZ OUTRA COMPARA E OUTRO QSORT PRA ORDENAR O VETOR*/
 		{
 			item.passageiro = eventos[aux];
-			item.passageiro.numero = num;
 			if(item.passageiro.andar_entrada<item.passageiro.andar_destino)
 			{
 				item.passageiro.subindo = true;
-				if(a1==0)
+				/*if(a1==0)
 				{
-					inserePrimeiro(item,subindo);
+					inserePrimeiro(item,entrada);
 					a1++;
 				}
 				else
 				{
-					insereInicio(item,subindo);
-				}
+					insereInicio(item,entrada);
+				}*/
 			}
 			else
 			{
 				item.passageiro.subindo = false;
-				if(a2==0)
+				/*if(a2==0)
 				{
-					inserePrimeiro(item,descendo);
+					inserePrimeiro(item,destino);
 					a2++;
 				}
 				else
 				{
-					insereInicio(item,descendo);
-				}
+					insereInicio(item,destino);
+				}*/
 			}
-			num++;
 			if(aux == 0)
 			{
 				inserePrimeiro(item,lista_eventos);
@@ -168,6 +257,23 @@ int compara(const void* x,const void* y) /*Funcao parametro para a qsort*/
 	return 0;
 }
 
+int comparaDestino(const void* x,const void* y) /*Funcao parametro para a qsort*/
+{
+	const Passageiro *x1 = (const Passageiro*) x;
+	const Passageiro *y1 = (const Passageiro*) y;
+
+	if (x1->andar_destino < y1->andar_destino)
+	{ 
+		return 1;
+	}
+	if (x1->andar_destino > y1->andar_destino)
+	{
+	 	return  -1;
+	}
+	
+	return 0;
+}
+
 void inserePrimeiro(Item item,tlista *lista)
 {
   celula *nova = (celula*) malloc(sizeof(celula));
@@ -186,4 +292,101 @@ void insereInicio(Item item,tlista *lista)
   nova->proximo = lista->primeiro; /*passa o pont primeiro para o pont proximo*/
 
   lista->primeiro = nova; /*passa o pont nova para o pont proximo*/
+}
+
+void removeItem(int p, tlista *lista)
+{
+
+  celula *anterior = lista->primeiro;
+  celula *atual = lista->primeiro;
+
+  int indice;
+
+  indice=1;
+
+  while(indice < p-1){
+    anterior = anterior->proximo;
+    indice++;
+  }
+  indice=1;
+  atual = anterior->proximo;
+
+  if(p == 1 || p == 0){
+    lista->primeiro = atual;
+    free(anterior);
+  }
+
+  else{
+    anterior->proximo = atual->proximo;
+    free(atual);
+  }
+}
+
+void remover(int pos, tlista *l)
+{
+	if(l->primeiro == NULL)
+  {
+		return ;
+	}	
+	if(pos < 0)
+  {
+		return ;
+	}
+	celula *removido = l->primeiro;
+	celula *ant_removido = NULL;
+	int i = 0;	
+	for (i = 0; i < pos && removido != NULL; i++) 
+  {
+		ant_removido = removido;
+		removido = removido->proximo;
+	}
+	if(removido != NULL)
+  {
+		if(removido == l->primeiro)
+    {
+			l->primeiro = removido->proximo;		
+		}
+    else
+    {
+			ant_removido->proximo = removido->proximo;		
+		}
+		if(removido == l->ultimo){
+			l->ultimo = ant_removido;
+		}
+		free(removido);
+	}
+	return ;
+}
+
+
+void fcfs(Elevador *elevador, tlista *lista_eventos, Passageiro embarcados[], int *num_eventos)
+{
+	do
+	{
+		trataTempo(elevador);
+		Passageiro aux = lista_eventos->primeiro->item.passageiro;	
+		while(elevador->tempo < aux.tempo_chamada)
+		{
+			elevador->tempo = elevador->tempo + 1;
+			trataTempo(elevador);
+		}
+		if(elevador->andar_atual > aux.andar_entrada)
+		{
+			elevadorDescendoFcfs(elevador,lista_eventos,embarcados,&aux);
+		}
+		else if (elevador->andar_atual < aux.andar_entrada)
+		{
+			elevadorSubindoFcfs(elevador,lista_eventos,embarcados,&aux);
+		}
+		else
+		{
+			embarcados[0] = aux;
+			elevador->tempo = elevador->tempo + 1;
+			trataTempo(elevador);
+			deixandoFcfs(elevador,embarcados);
+		}
+		remover(0,lista_eventos);
+		*num_eventos = *num_eventos - 1;
+	}while(*num_eventos > 0);
+	printf("acabou!!!!!!!!\n");
 }
