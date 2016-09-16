@@ -38,9 +38,10 @@ typedef struct tlista{
 
 
 
-
-void elevadorDescendo(Elevador *elevador,tlista *lista_eventos,Passageiro embarcados[],int* num_eventos); /*Tratamento do elevador descendo*/
-void elevadorSubindo(Elevador *elevador,tlista *lista_eventos,Passageiro embarcados[],int* num_eventos); /*Tratamento do elevador subindo*/
+void buscano(); /**/
+void deixano(); /***/
+void elevadorDescendo(Elevador *elevador,tlista *lista_eventos,tlista *descendo,Passageiro embarcados[],int* num_eventos); /*Tratamento do elevador descendo*/
+void elevadorSubindo(Elevador *elevador,tlista *lista_eventos,tlista *subindo,tlista *prox_subindo,Passageiro embarcados[],int* num_eventos); /*Tratamento do elevador subindo*/
 void elevadorParado(Elevador *elevador,tlista *lista_eventos,Passageiro embarcados[]); /*Não tem nenhuma chamada pendente, mas continua incrementando o tempo*/
 void aoEntrar(Passageiro passageiro); /*Imprimir no arquivo log informações de entrada*/
 void aoSair(Passageiro passageiro); /*Imprimir no arquivo log informações de saida*/
@@ -49,7 +50,13 @@ void iniciaElevador(Elevador *elevador); /*Inicializa o elevador*/
 void leArquivos(Elevador *elevador); /*Lê os arquivos de ambiente e eventos*/
 void embarcadosVazio(Passageiro embarcados[],int capacidade); /*Preenche o vetor de embarcados*/
 tlista* criaLista();/*Cria uma lista*/
-void preencheEventos(tlista *lista_eventos, tlista *subindo, tlista *descendo, int* num_eventos); /*Lê o arquivo de eventos, preenche vetor, ordena e preenche lista*/
+void preencheEventos(tlista *lista_eventos, tlista *entrada, tlista *destino, int* num_eventos); /*Lê o arquivo de eventos, preenche vetor, ordena e preenche lista*/
 int compara(const void* x,const void* y); /*Função para o qsort*/
 void inserePrimeiro(Item item,tlista *lista); /*Insere no inicio da lista*/
 void insereInicio(Item item,tlista *lista); 
+void removeItem(int p, tlista *lista);
+void fcfs(Elevador *elevador, tlista *lista_eventos, Passageiro embarcados[], int *num_eventos);
+void elevadorDescendoFcfs(Elevador *elevador, tlista *lista_eventos, Passageiro embarcados[], Passageiro *aux);
+void elevadorSubindoFcfs(Elevador *elevador, tlista *lista_eventos, Passageiro embarcados[], Passageiro *aux);
+void deixandoFcfs(Elevador *elevador,Passageiro embarcados[]);
+void remover(int pos, tlista *l);
