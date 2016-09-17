@@ -87,19 +87,32 @@ void elevadorSubindoFcfs(Elevador *elevador, tlista *lista_eventos, Passageiro e
 	elevador->ocupantes = 1;
 	deixandoFcfs(elevador,embarcados);
 }
-
-void elevadorDescendo(Elevador *elevador,tlista *lista_eventos,tlista *descendo,Passageiro embarcados[],int* num_eventos)/*Tratamento do elevador descendo*/
+void elevadorDescendo(Elevador *elevador,tlista *lista_eventos,tlista *lista_descendo,Passageiro embarcados[])/*Tratamento do elevador descendo*/
 {
+  tlista *lista_descendo_busca;
+  tlista *lista_descendo_deixa;
+
+  lista_descendo_busca = criaLista();
+  lista_descendo_deixa = criaLista();
+
+  Passageiro atual = lista_descendo->primeiro->item.passageiro;
+  
+
+  while (elevador->andar_atual > atual.andar_entrada){
+    elevador->andar_atual = elevador->andar_atual - 1;
+    elevador->tempo = elevador->tempo + 1;
+  }
 
 } 
 
-void elevadorSubindo(Elevador *elevador,tlista *lista_eventos,tlista *subindo,tlista *prox_subindo,Passageiro embarcados[],int* num_eventos) /*Tratamento do elevador subindo*/
+void elevadorSubindo(Elevador *elevador,tlista *lista_eventos,tlista *lista_subindo,Passageiro embarcados[]) 
 {
-	/*while(elevador->andar_atual != prox_subindo->ultimo->item.passageiro.andar_destino)
-	{
-		elevadorParado();
+  Passageiro atual = lista_subindo->primeiro->item.passageiro;
 
-	}*/
+	while(elevador->andar_atual != atual.andar_entrada)
+	{
+
+	}
 }
 
 void elevadorParado(Elevador *elevador,tlista *lista_eventos,Passageiro embarcados[]) /*Não tem nenhuma chamada pendente, mas continua incrementando o tempo*/
@@ -160,12 +173,15 @@ tlista* criaLista()
 	return nova;
 }
 
-void preencheEventos(tlista *lista_eventos, tlista *entrada, tlista *destino, int *num_eventos) /*Lê o arquivo de eventos, preenche vetor, ordena e preenche lista*/
+void preencheEventos(tlista *lista_eventos,tlista *lista_subindo,tlista *lista_descendo,tlista *entrada, tlista *destino, int* num_eventos) /*Lê o arquivo de eventos, preenche vetor, ordena e preenche lista*/
 {
 	FILE *fp;
-	Passageiro *eventos;
+	Passageiro *eventos, *eventos_sobem, *eventos_descem;
 	Item item;
 	int aux,a1,a2,a3,num = 1;
+  int conta_sobe = 0;
+  int conta_desce = 0;
+
 	fp = fopen("eventos.txt","r");
 	if(fp == NULL)/*COLOQUEI OS DOIS IGUAIS CERTOS AGR SEU FDP*/
 	{
@@ -181,6 +197,9 @@ void preencheEventos(tlista *lista_eventos, tlista *entrada, tlista *destino, in
 		
 		a1 =  (*num_eventos);
 		eventos = (Passageiro*)malloc(sizeof(Passageiro) * a1);
+    eventos_sobem = (Passageiro*)malloc(sizeof(Passageiro) * a1);/*alocando mais que necessario*/
+    eventos_descem = (Passageiro*)malloc(sizeof(Passageiro) * a1);/*alocando mais que necessario*/
+
 		rewind(fp);
 
 		for(aux = a1-1;aux >= 0;aux--)   /*Preencher o vetor com os dados do arquivo*/
@@ -200,14 +219,21 @@ void preencheEventos(tlista *lista_eventos, tlista *entrada, tlista *destino, in
 		for(aux=0;aux < *num_eventos;aux++) /*Preencher a lista (O COMPARA TA ORDENANDO TUDO PELO TEMPO. PARA PREENCHER DE OUTRO JEITO, FAZ OUTRA COMPARA E OUTRO QSORT PRA ORDENAR O VETOR*/
 		{
 			item.passageiro = eventos[aux];
-			if(item.passageiro.andar_entrada<item.passageiro.andar_destino)
+			if(item.passageiro.andar_entrada < item.passageiro.andar_destino)
 			{
 				item.passageiro.subindo = true;
+
+        eventos_sobem[conta_sobe] = eventos[aux];
+        eventos_sobem[conta_sobe].subindo = true;
+        conta_sobe++;
 			}
 			else
 			{
 				item.passageiro.subindo = false;
-			
+
+        eventos_descem[conta_desce] = eventos[aux];
+        eventos_descem[conta_desce].subindo = false;
+        conta_desce++;
 			}
 			if(aux == 0)
 			{
@@ -218,15 +244,44 @@ void preencheEventos(tlista *lista_eventos, tlista *entrada, tlista *destino, in
 				insereInicio(item, lista_eventos);
 			}
 		}
-		/*AGORA VOCE VAI ORDENAR DE ACORDO COM AS ENTRADAS*/
-		/*DA O QSORT NO VETOR COM A COMPARAENTRADA(EU NAO FIZ, FAÇA)*/
-		/*LOOP QUE PREENCHE A LISTA "entradas" COM OS ELEMENTOS DO VETOR (SO VER O JEITO Q EU FIZ, É A MESMA COISA*/
-		/*AGORA VOCE VAI ORDENAR DE ACORDO COM OS DESTINOS*/
-		/*DA O QSORT NO VETOR COM A COMPARADESTINO(JA FIZ RX)*/
-		/*LOOP QUE PREENCHE A LISTA "destino" COM O VETOR*/
-		
+
+    qsort(eventos_sobem,conta_sobe,sizeof(Passageiro),&comparaEntrada);/*Ordenar de acordo com o tempo e entrada*/
+    qsort(eventos_descem,conta_desce,sizeof(Passageiro),&comparaEntrada); /*Ordenar de acordo com o tempo e saida*/
+    
+
+    for(aux = conta_desce-1;aux >= 0;aux--)
+    {
+      item.passageiro = eventos_descem[aux];
+      if(aux == conta_desce-1)
+      {
+        inserePrimeiro(item,lista_descendo);
+      }
+      else
+      {
+        insereInicio(item, lista_descendo);
+      }
+    }
+
+    for(aux = conta_sobe-1;aux >= 0;aux--)
+    {
+      item.passageiro = eventos_sobem[aux];
+      if(aux == conta_sobe-1)
+      {
+        inserePrimeiro(item,lista_subindo);
+      }
+      else
+      {
+        insereInicio(item, lista_subindo);
+      }
+    }
+
 		free(eventos);	
 	}
+
+    lista_descendo->ultimo->proximo = NULL;
+
+    lista_subindo->ultimo->proximo = NULL;
+
 }
 
 int compara(const void* x,const void* y) /*Funcao parametro para a qsort*/
@@ -248,19 +303,36 @@ int compara(const void* x,const void* y) /*Funcao parametro para a qsort*/
 
 int comparaDestino(const void* x,const void* y) /*Funcao parametro para a qsort*/
 {
-	const Passageiro *x1 = (const Passageiro*) x;
-	const Passageiro *y1 = (const Passageiro*) y;
+  const Passageiro *x1 = (const Passageiro*) x;
+  const Passageiro *y1 = (const Passageiro*) y;
 
-	if (x1->andar_destino < y1->andar_destino)
-	{ 
-		return 1;
-	}
-	if (x1->andar_destino > y1->andar_destino)
-	{
-	 	return  -1;
-	}
-	
-	return 0;
+  if (x1->tempo_chamada < y1->tempo_chamada)
+  { 
+    return 1;
+  }
+  if (x1->tempo_chamada > y1->tempo_chamada)
+  {
+    return -1;
+  }
+  
+  return 0;
+}
+
+int comparaEntrada(const void* x,const void* y) /*Funcao parametro para a qsort*/
+{
+  const Passageiro *x1 = (const Passageiro*) x;
+  const Passageiro *y1 = (const Passageiro*) y;
+
+  if (x1->tempo_chamada < y1->tempo_chamada)
+  { 
+    return -1;
+  }
+  if (x1->tempo_chamada > y1->tempo_chamada)
+  {
+    return 1;
+  }
+  
+  return 0;
 }
 
 void inserePrimeiro(Item item,tlista *lista)
@@ -319,13 +391,38 @@ void remover(int pos, tlista *l)
 	return ;
 }
 
+void l_e_v(Elevador *elevador, tlista *lista_eventos,tlista *lista_subindo,tlista *lista_descendo, Passageiro embarcados[], int *num_eventos){
+  Passageiro aux = lista_eventos->primeiro->item.passageiro;
+  Item item;
+
+  if(aux.subindo == false){
+    item.passageiro = aux;
+    insereInicio(item,lista_subindo);
+  }
+
+  do
+  {
+    if(elevador->andar_atual < aux.andar_entrada)
+    {
+     elevadorSubindo(elevador,lista_eventos,lista_subindo,embarcados); 
+    }
+    else if(elevador->andar_atual > aux.andar_entrada)
+    {
+      elevadorDescendo(elevador,lista_eventos,lista_descendo,embarcados);
+    }
+
+    *num_eventos = *num_eventos - 1;
+  }while(*num_eventos > 0);
+
+
+}
 
 void fcfs(Elevador *elevador, tlista *lista_eventos, Passageiro embarcados[], int *num_eventos)
 {
 	do
 	{
 		trataTempo(elevador);
-		Passageiro aux = lista_eventos->primeiro->item.passageiro;	
+		Passageiro aux = lista_eventos->primeiro->item.passageiro;
 		while(elevador->tempo < aux.tempo_chamada)
 		{
 			elevador->tempo = elevador->tempo + 1;
@@ -348,6 +445,6 @@ void fcfs(Elevador *elevador, tlista *lista_eventos, Passageiro embarcados[], in
 		}
 		remover(0,lista_eventos);
 		*num_eventos = *num_eventos - 1;
+
 	}while(*num_eventos > 0);
-	printf("acabou!!!!!!!!\n");
 }
