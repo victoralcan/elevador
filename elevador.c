@@ -395,9 +395,20 @@ void l_e_v(Elevador *elevador, tlista *lista_eventos,tlista *lista_subindo,tlist
   Passageiro aux = lista_eventos->primeiro->item.passageiro;
   Item item;
 
-  if(aux.subindo == false){
+  /*if(aux.subindo == false){
     item.passageiro = aux;
     insereInicio(item,lista_subindo);
+  }*/
+
+  if (aux.subindo == false)
+  {
+    printf("%d %d\n",elevador->andar_atual,aux.andar_entrada);
+    while(elevador->andar_atual != aux.andar_entrada)
+    {
+      elevador->andar_atual++;
+      elevador->tempo++;
+    }
+    printf("%d %d\n",elevador->andar_atual,elevador->tempo);
   }
 
   do
