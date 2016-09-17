@@ -13,6 +13,8 @@ int main()
 	tlista *descendo;
 	tlista *prox_descendo;
 	tlista *lista_eventos;
+	tlista *lista_subindo;
+	tlista *lista_descendo;
 	int num_eventos = 0;
 
 	fp = fopen("log.txt","r");
@@ -30,12 +32,16 @@ int main()
 	embarcados = (Passageiro*) malloc(sizeof(Passageiro) * elevador.capacidade); 
 	embarcadosVazio(embarcados,elevador.capacidade); /*RX SENHOR POR FAVOR*/
 	lista_eventos = criaLista();
+	lista_subindo = criaLista();
+	lista_descendo = criaLista();
 	entradas = criaLista();
 	destinos = criaLista();
 	/*prox_subindo = criaLista();
 	prox_descendo = criaLista();*/
-	preencheEventos(lista_eventos,entradas,destinos,&num_eventos);
-	fcfs(&elevador,lista_eventos,embarcados,&num_eventos);
+	preencheEventos(lista_eventos,lista_subindo,lista_descendo,entradas,destinos,&num_eventos);
+	l_e_v(&elevador,lista_eventos,lista_subindo,lista_descendo,embarcados,&num_eventos);
+	/*fcfs(&elevador,lista_eventos,embarcados,&num_eventos);*/
+
 
 
 	free(lista_eventos);
