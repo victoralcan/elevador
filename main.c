@@ -43,10 +43,12 @@ int main()
 	/*fcfs(&elevador,lista_eventos,embarcados,&num_eventos);*/
 
 
-
+	removeAll(lista_subindo);
+	removeAll(lista_descendo);
+	removeAll(lista_eventos);
+	free(lista_subindo);
+	free(lista_descendo);
 	free(lista_eventos);
-	free(entradas);
-	free(destinos);
 	free(embarcados);
 
 
