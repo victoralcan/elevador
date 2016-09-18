@@ -62,3 +62,4 @@ void elevadorDescendoFcfs(Elevador *elevador, tlista *lista_eventos, Passageiro 
 void elevadorSubindoFcfs(Elevador *elevador, tlista *lista_eventos, Passageiro embarcados[], Passageiro *aux);
 void deixandoFcfs(Elevador *elevador,Passageiro embarcados[]);
 void remover(int pos, tlista *l);
+void removeAll(tlista *lista); /*desaloca lista da memória*/
