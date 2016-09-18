@@ -12,6 +12,18 @@ void deixano()
 
 }
 
+void removeAll(tlista *lista){
+  celula *aux = lista->primeiro;
+  celula *atual = lista->primeiro;
+
+  while(atual != NULL){
+    atual = atual->proximo;
+    free(aux);
+    aux = atual;
+  } /*desaloca a lista passada por parâmetro*/
+
+}
+
 void deixandoFcfs(Elevador *elevador,Passageiro embarcados[])
 {
 	if(embarcados[0].subindo == true)
@@ -89,30 +101,59 @@ void elevadorSubindoFcfs(Elevador *elevador, tlista *lista_eventos, Passageiro e
 }
 void elevadorDescendo(Elevador *elevador,tlista *lista_eventos,tlista *lista_descendo,Passageiro embarcados[])/*Tratamento do elevador descendo*/
 {
-  tlista *lista_descendo_busca;
-  tlista *lista_descendo_deixa;
+  celula *atual = lista_descendo->primeiro;
 
-  lista_descendo_busca = criaLista();
-  lista_descendo_deixa = criaLista();
-
-  Passageiro atual = lista_descendo->primeiro->item.passageiro;
-  
-
-  while (elevador->andar_atual > atual.andar_entrada){
-    elevador->andar_atual = elevador->andar_atual - 1;
-    elevador->tempo = elevador->tempo + 1;
-  }
+  do
+  {
+    if (elevador->tempo >= atual->item.passageiro.tempo_chamada)
+    {
+      if (elevador->andar_atual < atual->item.passageiro.andar_entrada)
+      {
+        printf("NAO VAI DÁ NAO\n");
+        printf("FOI %d %d\n",atual->item.passageiro.andar_entrada,atual->item.passageiro.andar_destino);
+        atual = atual->proximo;
+        printf("PROX %d %d\n",atual->item.passageiro.andar_entrada,atual->item.passageiro.andar_destino);
+      }
+      else
+      {
+        printf("QUE NÃO VAI DAR O QUE!!!\n");
+      }
+    }
+    elevador->tempo++;
+    elevador->andar_atual--;
+  }while(elevador->andar_atual != 0);
+  printf("ACABOU DESCIDA MANO\n");
+  getchar();
 
 } 
 
 void elevadorSubindo(Elevador *elevador,tlista *lista_eventos,tlista *lista_subindo,Passageiro embarcados[]) 
 {
-  Passageiro atual = lista_subindo->primeiro->item.passageiro;
+  celula *atual = lista_subindo->primeiro;
 
-	while(elevador->andar_atual != atual.andar_entrada)
+
+	do
 	{
+    if (elevador->tempo >= atual->item.passageiro.tempo_chamada)
+    {
+      if(elevador->andar_atual > atual->item.passageiro.andar_entrada)
+      {
+        printf("NAO VAI DÁ NAO\n");
+        printf("FOI %d %d\n",atual->item.passageiro.andar_entrada,atual->item.passageiro.andar_destino);
+        atual = atual->proximo;
+        printf("PROX %d %d\n",atual->item.passageiro.andar_entrada,atual->item.passageiro.andar_destino);
 
-	}
+      }
+      else
+      {
+        printf("QUE NÃO VAI DAR O QUE!!!\n");
+      }
+      
+    }
+    printf("%d %d\n",elevador->andar_atual,elevador->tempo);
+    elevador->tempo++;
+    elevador->andar_atual++;
+	}while(elevador->andar_atual != elevador->andares);
 }
 
 void elevadorParado(Elevador *elevador,tlista *lista_eventos,Passageiro embarcados[]) /*Não tem nenhuma chamada pendente, mas continua incrementando o tempo*/
@@ -183,7 +224,7 @@ void preencheEventos(tlista *lista_eventos,tlista *lista_subindo,tlista *lista_d
   int conta_desce = 0;
 
 	fp = fopen("eventos.txt","r");
-	if(fp == NULL)/*COLOQUEI OS DOIS IGUAIS CERTOS AGR SEU FDP*/
+	if(fp == NULL)
 	{
 		printf("Não foi possivel abrir o arquivo de eventos\n");
 	}
@@ -275,7 +316,9 @@ void preencheEventos(tlista *lista_eventos,tlista *lista_subindo,tlista *lista_d
       }
     }
 
-		free(eventos);	
+	 free(eventos);	
+   free(eventos_sobem);
+   free(eventos_descem);
 	}
 
     lista_descendo->ultimo->proximo = NULL;
@@ -395,29 +438,14 @@ void l_e_v(Elevador *elevador, tlista *lista_eventos,tlista *lista_subindo,tlist
   Passageiro aux = lista_eventos->primeiro->item.passageiro;
   Item item;
 
-  /*if(aux.subindo == false){
-    item.passageiro = aux;
-    insereInicio(item,lista_subindo);
-  }*/
-
-  if (aux.subindo == false)
-  {
-    printf("%d %d\n",elevador->andar_atual,aux.andar_entrada);
-    while(elevador->andar_atual != aux.andar_entrada)
-    {
-      elevador->andar_atual++;
-      elevador->tempo++;
-    }
-    printf("%d %d\n",elevador->andar_atual,elevador->tempo);
-  }
-
   do
   {
-    if(elevador->andar_atual < aux.andar_entrada)
+    if(elevador->andar_atual == 0)
     {
      elevadorSubindo(elevador,lista_eventos,lista_subindo,embarcados); 
+     printf("%d %d\n",elevador->andar_atual,elevador->andares );
     }
-    else if(elevador->andar_atual > aux.andar_entrada)
+    else if(elevador->andar_atual == elevador->andares)
     {
       elevadorDescendo(elevador,lista_eventos,lista_descendo,embarcados);
     }
