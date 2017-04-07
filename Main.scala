@@ -1,22 +1,16 @@
-package rx
+package ex2
+
 import scala.io.Source
 
 object Main extends App {
   
-  def leArquivo:String = {
-    val linhas : String = Source.fromFile("sample.txt").mkString
-    linhas 
+  def leArquivo= {
+    var retorno = ""
+    val linhas : String = Source.fromFile("sample").mkString
+    retorno  =  teste.codificaString(linhas)
+    println(retorno)
+    println(teste.decodificarString(retorno))
   }
-  
-  println(leArquivo)
-  
-  val rx = new CaesarCipher(3)
-  val t2 = new RotationCipher(3)
-  var retorno = ""
-  println(rx.codificaString("Rosca!"))
-  println(rx.decodificarString("Urvfd!"))
-  retorno = t2.codificaString("Rosca do Vitao!")
-  println(retorno + " " + t2.decodificarString(retorno) )
-  retorno = t2.codificaString("Rosca do Vitao!")
-  println(retorno + " " + t2.decodificarString(retorno) )
- }
+  val teste = new Rotationcipher(3)
+  leArquivo
+}
